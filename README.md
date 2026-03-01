@@ -1,4 +1,4 @@
-# GetRac - E-Commerce Platform
+# Getrac - E-Commerce Platform
 
 Une plateforme e-commerce moderne et sophistiquée construite avec React, TypeScript et Tailwind CSS.
 
@@ -68,7 +68,7 @@ src/
 
 ## 🔌 Configuration API
 
-L'application s'attend à une API backend sur `http://localhost:5000/api`
+L'application s'attend à une API backend sur `http://localhost:5001/api`
 
 ### Endpoints Requis:
 - `GET /products` - Tous les produits
@@ -98,5 +98,5 @@ MIT
 
 ## 👥 Contact
 
-Pour toute question, contactez-nous sur contact@getrac.com
-# getrac
+Pour toute question, contactez-nous sur contact@Getrac.com
+# Getrac
