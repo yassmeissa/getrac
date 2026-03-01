@@ -72,7 +72,7 @@ export const Home = () => {
             
             <div className="flex flex-wrap gap-4 w-full sm:w-auto">
               {/* Bouton Primaire (Solid - Vert clair pour le contraste) */}
-              <Link to="/products" className="flex-1 sm:flex-none justify-center inline-flex items-center gap-2 bg-[#9bd4d0] text-[#054d3b] font-bold rounded-xl px-8 py-4 hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-black/20">
+              <Link to="/products" className="flex-1 sm:flex-none justify-center inline-flex items-center gap-2 bg-[#9bd4d0] text-[#115E59] font-bold rounded-xl px-8 py-4 hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-black/20">
                 Voir le catalogue
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -102,7 +102,7 @@ export const Home = () => {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex flex-wrap justify-center gap-6 md:gap-12">
             {categories.map((cat, idx) => (
-              <Link key={cat.id} to={`/category/${cat.name.toLowerCase()}`} className="flex flex-col items-center gap-3 group">
+              <Link key={cat.id} to={`/products?category=${encodeURIComponent(cat.name)}`} className="flex flex-col items-center gap-3 group">
                 <div className="w-16 h-16 rounded-full bg-[#e6f2f0] text-[#0F766E] flex items-center justify-center group-hover:bg-[#0F766E] group-hover:text-white transition-colors duration-300 shadow-sm">
                   {/* Optionnel: afficher une icône si présente, sinon une icône par défaut */}
                   {cat.icon ? (

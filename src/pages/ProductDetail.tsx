@@ -94,7 +94,7 @@ export const ProductDetail = () => {
         {/* Breadcrumb */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-[#054d3b] hover:text-[#04796b] mb-8"
+          className="flex items-center gap-2 text-[#115E59] hover:text-[#04796b] mb-8"
         >
           <ArrowLeft size={20} />
           Retour
@@ -115,7 +115,7 @@ export const ProductDetail = () => {
           <div>
             {/* Category */}
             <div className="flex items-center gap-4 mb-4">
-              <span className="text-xs font-semibold text-[#054d3b] uppercase bg-[#e6f6f4] px-3 py-1 rounded-full">
+              <span className="text-xs font-semibold text-[#115E59] uppercase bg-[#e6f6f4] px-3 py-1 rounded-full">
                 {product.category}
               </span>
             </div>
@@ -194,21 +194,21 @@ export const ProductDetail = () => {
             {/* Features */}
             <div className="space-y-4">
               <div className="flex gap-4">
-                <Truck className="text-[#054d3b] flex-shrink-0" size={24} />
+                <Truck className="text-[#115E59] flex-shrink-0" size={24} />
                 <div>
                   <h4 className="font-semibold text-gray-900">Livraison gratuite</h4>
                   <p className="text-sm text-gray-600">Pour toute commande supérieure à 150 000 F CFA</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <Shield className="text-[#054d3b] flex-shrink-0" size={24} />
+                <Shield className="text-[#115E59] flex-shrink-0" size={24} />
                 <div>
                   <h4 className="font-semibold text-gray-900">Achat sécurisé</h4>
                   <p className="text-sm text-gray-600">Protection d'acheteur garantie</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <RotateCcw className="text-[#054d3b] flex-shrink-0" size={24} />
+                <RotateCcw className="text-[#115E59] flex-shrink-0" size={24} />
                 <div>
                   <h4 className="font-semibold text-gray-900">Retour facile</h4>
                   <p className="text-sm text-gray-600">Retour gratuit sous 30 jours</p>

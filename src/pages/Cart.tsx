@@ -115,7 +115,7 @@ export const Cart = () => {
         <div className="mb-10 flex items-center gap-3">
           <h1 className="text-3xl font-bold text-gray-900">Mon Panier</h1>
           {items.length > 0 && (
-            <span className="bg-[#9bd4d0]/30 text-[#054d3b] py-1 px-3 rounded-full text-sm font-semibold">
+            <span className="bg-[#9bd4d0]/30 text-[#115E59] py-1 px-3 rounded-full text-sm font-semibold">
               {items.length} article{items.length > 1 ? 's' : ''}
             </span>
           )}
@@ -159,8 +159,8 @@ export const Cart = () => {
 
                     {/* Détails */}
                     <div className="flex-1 w-full text-center sm:text-left">
-                      <p className="text-xs font-bold text-[#054d3b] uppercase mb-1">{item.category}</p>
-                      <Link to={`/products/${productId}`} className="hover:text-[#054d3b] transition-colors">
+                      <p className="text-xs font-bold text-[#115E59] uppercase mb-1">{item.category}</p>
+                      <Link to={`/products/${productId}`} className="hover:text-[#115E59] transition-colors">
                         <h3 className="font-bold text-lg text-gray-900 line-clamp-2 mb-2">{item.name}</h3>
                       </Link>
                       <p className="text-xl font-extrabold text-gray-900">
@@ -202,7 +202,7 @@ export const Cart = () => {
               })}
               
               <div className="pt-4 flex justify-between items-center">
-                <Link to="/products" className="text-[#054d3b] font-medium hover:underline flex items-center gap-2">
+                <Link to="/products" className="text-[#115E59] font-medium hover:underline flex items-center gap-2">
                   <ArrowRight size={16} className="rotate-180" /> Continuer mes achats
                 </Link>
                 <button onClick={handleClear} className="text-gray-500 hover:text-red-600 text-sm underline transition-colors">
@@ -229,7 +229,7 @@ export const Cart = () => {
 
                 <div className="flex justify-between items-end mb-8">
                   <span className="text-lg font-bold text-gray-900">Total TTC</span>
-                  <span className="text-2xl font-extrabold text-[#054d3b]">
+                  <span className="text-2xl font-extrabold text-[#115E59]">
                     {total.toLocaleString('fr-FR')} F CFA
                   </span>
                 </div>

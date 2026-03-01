@@ -132,11 +132,11 @@ export const Wishlist = () => {
                   </div>
 
                   <div className="p-5 flex flex-col flex-grow">
-                    <p className="text-xs font-bold text-[#054d3b] uppercase tracking-wider mb-2">
+                    <p className="text-xs font-bold text-[#115E59] uppercase tracking-wider mb-2">
                       {item.category}
                     </p>
                     
-                    <Link to={`/products/${productId}`} className="group-hover:text-[#054d3b] transition-colors">
+                    <Link to={`/products/${productId}`} className="group-hover:text-[#115E59] transition-colors">
                       <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
                         {item.name}
                       </h3>

@@ -105,21 +105,21 @@ export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
         />
 
         <button
-          className={`absolute top-4 left-4 bg-white rounded-full p-2 hover:bg-[#9bd4d0] hover:text-[#054d3b] transition transform hover:scale-110 animate-slideUp ${liked ? 'text-[#054d3b]' : ''}`}
+          className={`absolute top-4 left-4 bg-white rounded-full p-2 hover:bg-[#9bd4d0] hover:text-[#115E59] transition transform hover:scale-110 animate-slideUp ${liked ? 'text-[#115E59]' : ''}`}
           onClick={handleLike}
           aria-label={liked ? 'Retirer des favoris' : 'Ajouter aux favoris'}
         >
-          <Heart size={20} fill={liked ? '#054d3b' : 'none'} />
+          <Heart size={20} fill={liked ? '#115E59' : 'none'} />
         </button>
       </div>
 
       {/* Content */}
       <div className="p-4">
-        <p className="text-xs font-semibold text-[#054d3b] uppercase mb-2">
+        <p className="text-xs font-semibold text-[#115E59] uppercase mb-2">
           {product.category}
         </p>
 
-        <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-[#054d3b] transition">
+        <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-[#115E59] transition">
           {product.name}
         </h3>
 

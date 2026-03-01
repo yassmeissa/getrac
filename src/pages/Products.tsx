@@ -1,10 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Filter } from 'lucide-react';
 import { ProductCard } from '../components';
 import { productService, categoryService } from '../services/api';
 import type { Product } from '../types';
 
 export const Products = () => {
+  const location = useLocation();
   const [products, setProducts] = useState<(Product & { img?: string; qty?: number; price?: number | string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -31,6 +33,21 @@ export const Products = () => {
     };
     fetchData();
   }, []);
+
+  // Synchronise le filtre catégorie avec l'URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category');
+    if (cat) {
+      // On cherche d'abord par nom, puis par id
+      const found = categories.find(c => c.name === cat || String(c.id) === cat);
+      if (found) setSelectedCategory(String(found.id));
+      else setSelectedCategory('all');
+    } else {
+      setSelectedCategory('all');
+    }
+    // eslint-disable-next-line
+  }, [location.search, categories.length]);
 
   // Catégories pour le filtre
   const filterCategories = useMemo(() => [
@@ -155,7 +172,7 @@ export const Products = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full border border-[#9bd4d0] rounded-lg px-3 py-2 text-sm focus:border-[#054d3b] focus:outline-none"
+                  className="w-full border border-[#9bd4d0] rounded-lg px-3 py-2 text-sm focus:border-[#115E59] focus:outline-none"
                 >
                   <option value="newest">Plus récent</option>
                   <option value="price-asc">Prix: Bas à Haut</option>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { categoryService } from '../services/api';
 import logo from '../assets/logo-getrac.png'; 
@@ -13,6 +13,7 @@ export const Footer = () => {
   useEffect(() => {
     categoryService.getAll()
       .then((data) => {
+        // On s'assure que les données sont bien chargées
         setCategories(data);
         setLoading(false);
       })
@@ -24,63 +25,63 @@ export const Footer = () => {
 
   return (
     <footer className="bg-gray-100 text-gray-600 mt-20 font-sans border-t border-gray-200">
-      <div className="container mx-auto px-6 lg:px-12 py-16">
+      <div className="container-max mx-auto px-6 lg:px-12 py-16">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
-          {/* About */}
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <img src={logo} alt="Getrac Logo" className="h-10 w-10 object-contain p-1" />
-              {/* Titre passé en vert foncé */}
-              <h3 className="text-[#054d3b] text-xl font-bold">Getrac Services</h3>
+          {/* Section: À propos */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="Getrac Logo" className="h-12 w-auto object-contain" />
+              <h3 className="text-[#115E59] text-xl font-bold tracking-tight">Getrac Services</h3>
             </div>
-            {/* Texte passé en gris moyen */}
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Votre partenaire de confiance au Sénégal pour l'équipement informatique professionnel et particulier.
+            <p className="text-gray-600 leading-relaxed">
+              Votre partenaire de confiance au Sénégal pour l'équipement informatique professionnel et les solutions télécoms de pointe.
             </p>
+            <div className="flex gap-4">
+              {/* Tu pourras ajouter tes réseaux sociaux ici plus tard */}
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Section: Navigation rapide */}
           <div>
-            {/* Titre passé en gris très foncé */}
-            <h4 className="text-gray-900 text-lg font-semibold mb-6">Navigation</h4>
-            <ul className="space-y-3">
+            <h4 className="text-gray-900 text-lg font-bold mb-6">Navigation</h4>
+            <ul className="space-y-4">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-[#054d3b] transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#054d3b] opacity-0 hover:opacity-100 transition-opacity"></span> Accueil
+                <Link to="/" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
+                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
+                  Accueil
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-600 hover:text-[#054d3b] transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#054d3b] opacity-0 hover:opacity-100 transition-opacity"></span> Catalogue
+                <Link to="/products" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
+                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
+                  Catalogue
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-[#054d3b] transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#054d3b] opacity-0 hover:opacity-100 transition-opacity"></span> À propos
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-600 hover:text-[#054d3b] transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#054d3b] opacity-0 hover:opacity-100 transition-opacity"></span> Contact
+                <Link to="/contact" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
+                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Section: Catégories dynamiques */}
           <div>
-            <h4 className="text-gray-900 text-lg font-semibold mb-6">Catégories</h4>
-            <ul className="space-y-3">
-              {loading && <li className="text-gray-400">Chargement...</li>}
-              {error && <li className="text-red-500">{error}</li>}
-              {!loading && !error && categories.length === 0 && (
-                <li className="text-gray-400">Aucune catégorie</li>
-              )}
-              {!loading && !error && categories.map((cat) => (
-                <li key={cat.id ?? cat.name}>
-                  <Link to={`/category/${cat.id}`} className="text-gray-600 hover:text-[#054d3b] transition-colors">
+            <h4 className="text-gray-900 text-lg font-bold mb-6">Catégories</h4>
+            <ul className="space-y-4">
+              {loading && <li className="text-gray-400 animate-pulse">Chargement...</li>}
+              {error && <li className="text-red-400 text-sm">{error}</li>}
+              {!loading && !error && categories.slice(0, 5).map((cat) => (
+                <li key={cat.idCategory || cat.name}>
+                  {/* Note: On utilise idCategory car c'est le nom dans ta base MySQL */}
+                  <Link 
+                    to={`/products?category=${cat.idCategory}`} 
+                    className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#9bd4d0]"></span>
                     {cat.name}
                   </Link>
                 </li>
@@ -88,47 +89,46 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Section: Contact Direct */}
           <div>
-            <h4 className="text-gray-900 text-lg font-semibold mb-6">Contactez-nous</h4>
-            <div className="space-y-4">
+            <h4 className="text-gray-900 text-lg font-bold mb-6">Contactez-nous</h4>
+            <div className="space-y-5">
               <div className="flex items-start gap-3">
-                {/* Icônes passées en vert foncé */}
-                <MapPin size={20} className="text-[#054d3b] shrink-0 mt-1" />
-                <span className="text-gray-600">Dakar, Sénégal<br/></span>
+                <MapPin size={20} className="text-[#115E59] shrink-0 mt-1" />
+                <span className="text-gray-600">Dakar, Sénégal<br/><span className="text-xs text-gray-400">Siège social</span></span>
               </div>
               
-              {/* Affichage des 3 numéros de téléphone */}
               <div className="flex items-start gap-3">
-                <Phone size={20} className="text-[#054d3b] shrink-0 mt-1" />
+                <Phone size={20} className="text-[#115E59] shrink-0 mt-1" />
                 <div className="flex flex-col gap-2">
-                  <a href="tel:+221338250093" className="text-gray-600 hover:text-[#054d3b] transition-colors">+221 33 825 00 93</a>
-                  <a href="tel:+2217763447475" className="text-gray-600 hover:text-[#054d3b] transition-colors">+221 77 634 74 75</a>
-                  <a href="tel:+221776444454" className="text-gray-600 hover:text-[#054d3b] transition-colors">+221 77 644 44 54</a>
+                  <a href="tel:+221338250093" className="hover:text-[#115E59] transition-colors font-medium text-gray-700">+221 33 825 00 93</a>
+                  <a href="tel:+221776347475" className="hover:text-[#115E59] transition-colors text-sm">+221 77 634 74 75</a>
+                  <a href="tel:+221776444454" className="hover:text-[#115E59] transition-colors text-sm">+221 77 644 44 54</a>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <Mail size={20} className="text-[#054d3b] shrink-0" />
-                <a href="mailto:contact@getracservices.com" className="text-gray-600 hover:text-[#054d3b] transition-colors break-all">contact@getracservices.com</a>
+                <Mail size={20} className="text-[#115E59] shrink-0" />
+                <a href="mailto:servicesgetrac@gmail.com" className="hover:text-[#115E59] transition-colors break-all font-medium text-gray-700">
+                  servicesgetrac@gmail.com
+                </a>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        {/* Bordure passée en gris au lieu de blanc transparent */}
+        {/* Barre de pied de page (Copyright & Legal) */}
         <div className="border-t border-gray-200 pt-8 mt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500 text-center md:text-left">
-              © {new Date().getFullYear()} GetRac Services. Tous droits réservés.
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-sm text-gray-500 font-medium">
+              © {new Date().getFullYear()} <span className="text-[#115E59]">Getrac Services</span>. Tous droits réservés.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <Link to="/privacy" className="text-gray-500 hover:text-[#054d3b] transition-colors">
-                Politique de confidentialité
+            <div className="flex flex-wrap justify-center gap-8 text-sm">
+              <Link to="/privacy" className="text-gray-500 hover:text-[#115E59] transition-colors">
+                Confidentialité
               </Link>
-              <Link to="/terms" className="text-gray-500 hover:text-[#054d3b] transition-colors">
-                Conditions générales
+              <Link to="/terms" className="text-gray-500 hover:text-[#115E59] transition-colors">
+                Conditions de vente
               </Link>
             </div>
           </div>
