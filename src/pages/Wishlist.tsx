@@ -37,7 +37,7 @@ export const Wishlist = () => {
     setItems((prev) => prev.filter((item) => item.id !== id && (item as any).idProduct !== id));
   };
 
-  const handleAddToCart = (productId: number, imgSrc: string) => {
+  const handleAddToCart = (productId: number) => {
     const imgEl = document.querySelector(`#wishlist-img-${productId}`) as HTMLImageElement;
     const cartEl = document.getElementById('cart-icon'); 
 
@@ -147,7 +147,7 @@ export const Wishlist = () => {
                       </div>
                       
                       <button 
-                        onClick={() => handleAddToCart(productId, item.img || item.image || 'https://via.placeholder.com/300')}
+                        onClick={() => handleAddToCart(productId)}
                         className="w-full btn-primary flex items-center justify-center gap-2 py-2.5"
                       >
                         <ShoppingCart size={18} />

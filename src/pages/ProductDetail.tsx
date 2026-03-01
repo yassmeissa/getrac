@@ -105,7 +105,7 @@ export const ProductDetail = () => {
           <div className="card p-6">
             <img
               id="product-detail-img"
-              src={product.img || (product as any).image}
+              src={(product as any).img || (product as any).image}
               alt={product.name}
               className="w-full h-96 object-cover rounded-lg"
             />
