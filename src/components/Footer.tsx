@@ -50,14 +50,14 @@ export const Footer = () => {
           <div>
             <h4 className="text-gray-900 text-lg font-black mb-8 border-b-2 border-[#115E59] inline-block pb-1">Navigation</h4>
             <ul className="space-y-4">
-              {['Accueil', 'Catalogue', 'Contact'].map((item) => (
-                <li key={item}>
+              {[{ label: 'Accueil', to: '/' }, { label: 'Catalogue', to: '/products' }, { label: 'Contact', to: '/contact' }].map((item) => (
+                <li key={item.label}>
                   <Link 
-                    to={item === 'Accueil' ? '/' : `/${item.toLowerCase()}`} 
+                    to={item.to}
                     className="group text-gray-500 hover:text-[#115E59] transition-all flex items-center gap-2 font-medium"
                   >
                     <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
