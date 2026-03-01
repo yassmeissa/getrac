@@ -43,7 +43,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans text-gray-800">
+    <div className="min-h-screen text-gray-800">
       
       {/* Hero Section - Avec le gradient Sarcelle/Cyan choisi */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#115E59] to-[#0F766E] text-white py-24 animate-fadeIn">
