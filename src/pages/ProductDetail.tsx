@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, ShoppingCart, Truck, Shield, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Heart, ShoppingCart, Truck, Shield, RotateCcw } from 'lucide-react';
 import { productService } from '../services/api';
 import { FlyToCartOverlay } from '../components/FlyToCartOverlay';
 
@@ -29,7 +29,7 @@ export const ProductDetail = () => {
 
       try {
         // On convertit en nombre seulement si id est présent
-        const data = await productService.getById(id); 
+        const data = await productService.getById(Number(id)); 
         setProduct(data);
         
         const pid = getPID(data);

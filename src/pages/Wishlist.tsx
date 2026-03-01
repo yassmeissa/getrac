@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, ShoppingCart, HeartCrack, ArrowRight } from 'lucide-react';
-import type { Product } from '../types';
 import { FlyToCartOverlay } from '../components/FlyToCartOverlay';
 
 export const Wishlist = () => {

@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { Filter, SearchX } from 'lucide-react';
 import { ProductCard } from '../components';
 import { productService, categoryService } from '../services/api';
-import type { Product } from '../types';
 
 export const Products = () => {
   const location = useLocation();
