@@ -24,8 +24,20 @@ export const Contact = () => {
     e.preventDefault();
     setLoading(true);
     
+    const form = { ...formData };
+    const dataToSend = {
+      name: `${form.firstName} ${form.lastName}`,
+      userType: form.userType,
+      lastName: form.lastName,
+      firstName: form.firstName,
+      email: form.email,
+      phone: form.phone,
+      subject: form.subject,
+      message: form.message,
+    };
+    
     // Appel à ton service API
-    const success = await contactService.send(formData);
+    const success = await contactService.send(dataToSend);
     
     setLoading(false);
     if (success) {

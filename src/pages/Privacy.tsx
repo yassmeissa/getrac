@@ -1,4 +1,3 @@
-import React from 'react';
 import { ShieldCheck, Lock, Eye, Database, Cookie, UserCheck, Mail, ChevronRight, Clock } from 'lucide-react';
 
 export const Privacy = () => {

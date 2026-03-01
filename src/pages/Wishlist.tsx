@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, ShoppingCart, HeartCrack, ArrowRight } from 'lucide-react';
 import type { Product } from '../types';
@@ -108,7 +108,6 @@ export const Wishlist = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {items.map((item) => {
               const productId = item.id || (item as any).idProduct;
-              const imgSrc = item.img || item.image || 'https://via.placeholder.com/300';
 
               return (
                 <div 
@@ -118,7 +117,7 @@ export const Wishlist = () => {
                   <div className="relative h-56 bg-gray-100 overflow-hidden">
                     <img 
                       id={`wishlist-img-${productId}`} // ID unique pour l'animation
-                      src={imgSrc} 
+                      src={item.img || item.image || 'https://via.placeholder.com/300'} 
                       alt={item.name} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -148,7 +147,7 @@ export const Wishlist = () => {
                       </div>
                       
                       <button 
-                        onClick={() => handleAddToCart(productId, imgSrc)}
+                        onClick={() => handleAddToCart(productId, item.img || item.image || 'https://via.placeholder.com/300')}
                         className="w-full btn-primary flex items-center justify-center gap-2 py-2.5"
                       >
                         <ShoppingCart size={18} />

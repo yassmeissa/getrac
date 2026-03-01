@@ -1,4 +1,3 @@
-import React from 'react';
 import { ShieldCheck, FileText, Clock, ChevronRight, Mail, Phone } from 'lucide-react';
 
 export const Terms = () => {

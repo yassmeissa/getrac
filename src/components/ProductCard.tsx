@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Heart, ShoppingCart } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import type { Product } from '../types';
 import { FlyToCartOverlay } from './FlyToCartOverlay';
 
 interface ProductCardProps {
   product: Product & { img?: string; qty?: number; idProduct?: number };
-  hideDiscount?: boolean;
 }
 
-export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
+export const ProductCard = ({ product }: ProductCardProps) => {
   const productId = product.id || product.idProduct;
 
   const [liked, setLiked] = useState(false);
@@ -73,25 +72,6 @@ export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
   };
 
   const handleFlyEnd = () => setFlyData(null);
-
-  const discount = useMemo(() => {
-    if (!productId) return 0;
-    return (productId * 7) % 30 + 5; 
-  }, [productId]);
-  
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            size={16}
-            className={i < Math.round(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
-          />
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="card group">

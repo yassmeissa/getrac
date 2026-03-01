@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 interface FlyToCartOverlayProps {
@@ -9,12 +9,10 @@ interface FlyToCartOverlayProps {
 }
 
 export const FlyToCartOverlay = ({ img, from, to, onEnd }: FlyToCartOverlayProps) => {
-  const [isRendered, setIsRendered] = useState(false);
-
   useEffect(() => {
     // On déclenche un mini-délai pour forcer le navigateur à appliquer les styles initiaux
     // avant de lancer l'animation CSS
-    const frame = requestAnimationFrame(() => setIsRendered(true));
+    const frame = requestAnimationFrame(() => {});
     
     // La durée de l'animation CSS est de 0.7s (700ms)
     const timeout = setTimeout(onEnd, 700);

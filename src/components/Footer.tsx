@@ -75,10 +75,10 @@ export const Footer = () => {
               {loading && <li className="text-gray-400 animate-pulse">Chargement...</li>}
               {error && <li className="text-red-400 text-sm">{error}</li>}
               {!loading && !error && categories.slice(0, 5).map((cat) => (
-                <li key={cat.idCategory || cat.name}>
+                <li key={cat.id || cat.name}>
                   {/* Note: On utilise idCategory car c'est le nom dans ta base MySQL */}
                   <Link 
-                    to={`/products?category=${cat.idCategory}`} 
+                    to={`/products?category=${cat.id}`} 
                     className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2"
                   >
                     <span className="w-1 h-1 rounded-full bg-[#9bd4d0]"></span>

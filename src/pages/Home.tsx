@@ -6,10 +6,7 @@ import {
   ShieldCheck, 
   Headphones, 
   Sparkles, 
-  Monitor, 
-  Smartphone, 
-  Printer, 
-  Tv 
+  Monitor 
 } from 'lucide-react';
 import { ProductCard } from '../components';
 import { productService, categoryService } from '../services/api';
@@ -101,7 +98,7 @@ export const Home = () => {
       <section className="py-12 bg-white border-b border-gray-100">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex flex-wrap justify-center gap-6 md:gap-12">
-            {categories.map((cat, idx) => (
+            {categories.map((cat) => (
               <Link key={cat.id} to={`/products?category=${encodeURIComponent(cat.name)}`} className="flex flex-col items-center gap-3 group">
                 <div className="w-16 h-16 rounded-full bg-[#e6f2f0] text-[#0F766E] flex items-center justify-center group-hover:bg-[#0F766E] group-hover:text-white transition-colors duration-300 shadow-sm">
                   {/* Optionnel: afficher une icône si présente, sinon une icône par défaut */}
@@ -169,7 +166,7 @@ export const Home = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} hideDiscount />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
