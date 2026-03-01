@@ -34,6 +34,7 @@ export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
       setLiked(false);
     } else {
       localStorage.setItem(`like_${productId}`, '1');
+      localStorage.setItem(`product_${productId}`, JSON.stringify(product));
       setLiked(true);
     }
   };
@@ -68,6 +69,7 @@ export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
     const newQty = cartQty + 1;
     setCartQty(newQty);
     localStorage.setItem(`cartQty_${productId}`, String(newQty));
+    localStorage.setItem(`product_${productId}`, JSON.stringify(product));
   };
 
   const handleFlyEnd = () => setFlyData(null);
@@ -151,7 +153,7 @@ export const ProductCard = ({ product, hideDiscount }: ProductCardProps) => {
             onClick={handleAddToCart}
           >
             <ShoppingCart size={18} />
-            Ajouter {cartQty > 0 && <span className="ml-1">({cartQty})</span>}
+            Ajouter
           </button>
         </div>
         

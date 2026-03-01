@@ -27,3 +27,5 @@ export interface ContactForm {
 export interface CartItem extends Product {
   quantity: number;
 }
+
+export { default as Wishlist } from '../pages/Wishlist';

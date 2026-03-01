@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Heart, ShoppingCart, Truck, Shield, RotateCcw } from 'lucide-react';
 import { productService } from '../services/api';
 import type { Product } from '../types';
+import { FlyToCartOverlay } from '../components/FlyToCartOverlay';
 
 export const ProductDetail = () => {
   const { id } = useParams();
@@ -10,6 +11,11 @@ export const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [flyData, setFlyData] = useState<null | {
+    img: string;
+    from: { x: number; y: number; width: number; height: number };
+    to: { x: number; y: number };
+  }>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -48,6 +54,40 @@ export const ProductDetail = () => {
     );
   }
 
+  const handleAddToCart = () => {
+    if (!product) return;
+    const imgEl = document.querySelector('#product-detail-img') as HTMLImageElement;
+    const cartEl = document.getElementById('cart-icon');
+    if (imgEl && cartEl) {
+      const from = imgEl.getBoundingClientRect();
+      const to = cartEl.getBoundingClientRect();
+      setFlyData({
+        img: imgEl.src,
+        from: {
+          x: from.left,
+          y: from.top,
+          width: from.width,
+          height: from.height
+        },
+        to: {
+          x: to.left + (to.width / 2) - (from.width / 2),
+          y: to.top + (to.height / 2) - (from.height / 2)
+        },
+      });
+    }
+    // Ajout logique au panier
+    const storedQty = parseInt(localStorage.getItem(`cartQty_${product.id}`) || '0', 10);
+    const newQty = (isNaN(storedQty) ? 0 : storedQty) + quantity;
+    localStorage.setItem(`cartQty_${product.id}`, String(newQty));
+    localStorage.setItem(`product_${product.id}`, JSON.stringify(product));
+  };
+
+  const handleAddToWishlist = () => {
+    if (!product) return;
+    localStorage.setItem(`like_${product.id}`, '1');
+    localStorage.setItem(`product_${product.id}`, JSON.stringify(product));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container-max">
@@ -64,7 +104,8 @@ export const ProductDetail = () => {
           {/* Product Image */}
           <div className="card p-6">
             <img
-              src={product.img}
+              id="product-detail-img"
+              src={product.img || (product as any).image}
               alt={product.name}
               className="w-full h-96 object-cover rounded-lg"
             />
@@ -133,11 +174,18 @@ export const ProductDetail = () => {
 
             {/* Actions */}
             <div className="flex gap-4 mb-8">
-              <button disabled={qty === 0} className="flex-1 btn-primary flex items-center justify-center gap-2">
+              <button
+                disabled={qty === 0}
+                className="flex-1 btn-primary flex items-center justify-center gap-2"
+                onClick={handleAddToCart}
+              >
                 <ShoppingCart size={20} />
                 Ajouter au panier
               </button>
-              <button className="btn-secondary flex items-center justify-center gap-2">
+              <button
+                className="btn-secondary flex items-center justify-center gap-2"
+                onClick={handleAddToWishlist}
+              >
                 <Heart size={20} />
                 Wishlist
               </button>
@@ -169,6 +217,16 @@ export const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Animation fly-to-cart */}
+        {flyData && (
+          <FlyToCartOverlay
+            img={flyData.img}
+            from={flyData.from}
+            to={flyData.to}
+            onEnd={() => setFlyData(null)}
+          />
+        )}
       </div>
     </div>
   );

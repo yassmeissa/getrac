@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header, Footer } from './components';
 import { Home, Products, ProductDetail, Contact, About, NotFound } from './pages';
+import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
 import './App.css';
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
