@@ -80,7 +80,7 @@ export const Cart = () => {
     try {
       const orderId = `CMD-${Math.floor(Math.random() * 1000000)}`;
       
-      const response = await fetch('http://localhost:5001/api/create-payment', { // ⚠️ Attention : Ton backend tourne sur le port 5001 selon tes logs !
+      const response = await fetch('https://getrac-backend.onrender.com/api/create-payment', { // ⚠️ Attention : Ton backend tourne sur le port 5001 selon tes logs !
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
