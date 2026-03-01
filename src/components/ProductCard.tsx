@@ -5,16 +5,22 @@ import type { Product } from '../types';
 import { FlyToCartOverlay } from './FlyToCartOverlay';
 
 interface ProductCardProps {
-  product: Product & { img?: string; qty?: number; idProduct?: number };
+  product: Product & { 
+    img?: string; 
+    qty?: number; 
+    idProduct?: number; 
+    idproduct?: number; // Ajout pour la compatibilité Postgres
+    image?: string;
+  };
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const productId = product.id || product.idProduct;
+  // Correction cruciale : Détection de l'ID peu importe la casse (Postgres)
+  const productId = product.id || product.idProduct || product.idproduct;
 
   const [liked, setLiked] = useState(false);
   const [cartQty, setCartQty] = useState(0);
 
-  // CORRECTION 1 : On type correctement le state pour correspondre aux variables x, y, width, height
   const [flyData, setFlyData] = useState<null | { 
     img: string; 
     from: { x: number; y: number; width: number; height: number }; 
@@ -22,12 +28,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   }>(null);
 
   useEffect(() => {
-    setLiked(!!localStorage.getItem(`like_${productId}`));
-    const storedQty = parseInt(localStorage.getItem(`cartQty_${productId}`) || '0', 10);
-    setCartQty(isNaN(storedQty) ? 0 : storedQty);
+    if (productId) {
+      setLiked(!!localStorage.getItem(`like_${productId}`));
+      const storedQty = parseInt(localStorage.getItem(`cartQty_${productId}`) || '0', 10);
+      setCartQty(isNaN(storedQty) ? 0 : storedQty);
+    }
   }, [productId]);
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault(); // Empêche la navigation si le bouton est dans un Link
+    if (!productId) return;
+
     if (liked) {
       localStorage.removeItem(`like_${productId}`);
       setLiked(false);
@@ -39,9 +50,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   const handleAddToCart = () => {
+    if (!productId) return;
+
     const imgEl = document.querySelector(`#product-img-${productId}`) as HTMLImageElement;
-    
-    // Assure-toi que ton icône panier dans le Header a bien id="cart-icon"
     const cartEl = document.getElementById('cart-icon'); 
 
     if (imgEl && cartEl) {
@@ -61,8 +72,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           y: to.top + (to.height / 2) - (from.height / 2)
         },
       });
-    } else {
-      console.warn("L'image ou l'icône du panier (id='cart-icon') est introuvable.");
     }
 
     const newQty = cartQty + 1;
@@ -71,79 +80,86 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     localStorage.setItem(`product_${productId}`, JSON.stringify(product));
   };
 
-  const handleFlyEnd = () => setFlyData(null);
+  const formatPrice = (price?: string | number) => {
+    if (price === undefined) return '—';
+    const numPrice = Number(String(price).replace(/[^\d.]/g, ''));
+    return isNaN(numPrice) ? '—' : `${numPrice.toLocaleString('fr-FR')} F CFA`;
+  };
+
+  const stock = product.stock ?? product.qty ?? 0;
 
   return (
-    <div className="card group">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full">
       {/* Image Container */}
-      <div className="relative overflow-hidden h-64 bg-gray-100">
+      <div className="relative overflow-hidden h-64 bg-gray-50">
         <img
           id={`product-img-${productId}`}
-          src={product.img || product.image}
+          src={product.img || product.image || '/placeholder.png'}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
 
         <button
-          className={`absolute top-4 left-4 bg-white rounded-full p-2 hover:bg-[#9bd4d0] hover:text-[#115E59] transition transform hover:scale-110 animate-slideUp ${liked ? 'text-[#115E59]' : ''}`}
+          className={`absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-sm hover:scale-110 transition-all ${liked ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
           onClick={handleLike}
           aria-label={liked ? 'Retirer des favoris' : 'Ajouter aux favoris'}
         >
-          <Heart size={20} fill={liked ? '#115E59' : 'none'} />
+          <Heart size={20} fill={liked ? 'currentColor' : 'none'} />
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <p className="text-xs font-semibold text-[#115E59] uppercase mb-2">
-          {product.category}
+      <div className="p-6 flex flex-col flex-grow">
+        <p className="text-[10px] font-bold text-[#115E59] uppercase tracking-widest mb-2">
+          {product.category || 'Matériel IT'}
         </p>
 
-        <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-[#115E59] transition">
-          {product.name}
-        </h3>
+        <Link to={`/products/${productId}`} className="hover:text-[#115E59] transition-colors">
+          <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">
+            {product.name}
+          </h3>
+        </Link>
 
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+        <p className="text-sm text-gray-500 mb-4 line-clamp-2 italic">
           {product.description}
         </p>
 
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <span className="text-2xl font-bold text-gray-900">
-              {product.price !== undefined && !isNaN(Number(String(product.price).replace(/[^\d.]/g, '')))
-                ? Number(String(product.price).replace(/[^\d.]/g, '')).toLocaleString('fr-FR') + ' F CFA'
-                : '—'}
+        <div className="mt-auto">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xl font-black text-gray-900">
+              {formatPrice(product.price)}
             </span>
           </div>
-        </div>
 
-        <p className={`text-sm mb-4 font-semibold ${(product.stock ?? product.qty) > 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {(product.stock ?? product.qty) > 0 ? `${product.stock ?? product.qty} en stock` : 'Rupture de stock'}
-        </p>
+          <p className={`text-xs mb-6 font-bold flex items-center gap-1.5 ${stock > 0 ? 'text-green-600' : 'text-red-500'}`}>
+            <span className={`w-2 h-2 rounded-full ${stock > 0 ? 'bg-green-600' : 'bg-red-500'}`}></span>
+            {stock > 0 ? `${stock} en stock` : 'Rupture de stock'}
+          </p>
 
-        <div className="flex flex-col gap-2 animate-slideUp">
-          <Link
-            to={productId ? `/products/${productId}` : '#'}
-            className="flex-1 btn-primary text-center"
-          >
-            Voir détails
-          </Link>
-          <button
-            className={"flex-1 btn-secondary flex items-center justify-center gap-2"}
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart size={18} />
-            Ajouter
-          </button>
+          <div className="flex flex-col gap-2">
+            <Link
+              to={productId ? `/products/${productId}` : '#'}
+              className="w-full py-2.5 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm text-center hover:bg-gray-50 transition-colors"
+            >
+              Détails du produit
+            </Link>
+            <button
+              disabled={stock === 0}
+              className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl shadow-lg shadow-[#115E59]/10 disabled:opacity-50"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart size={18} />
+              Ajouter au panier
+            </button>
+          </div>
         </div>
         
-        {/* CORRECTION 2 : On passe directement les objets 'from' et 'to' tels quels */}
         {flyData && (
           <FlyToCartOverlay
             img={flyData.img}
             from={flyData.from}
             to={flyData.to}
-            onEnd={handleFlyEnd}
+            onEnd={() => setFlyData(null)}
           />
         )}
       </div>

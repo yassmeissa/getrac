@@ -3,18 +3,21 @@ import { Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { categoryService } from '../services/api';
 import logo from '../assets/logo-getrac.png'; 
-import type { Category } from '../types';
 
 export const Footer = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     categoryService.getAll()
       .then((data) => {
-        // On s'assure que les données sont bien chargées
-        setCategories(data);
+        // Normalisation immédiate des IDs pour éviter les bugs de liens
+        const normalized = data.map((cat: any) => ({
+          ...cat,
+          id: cat.id || cat.idcategory || cat.idCategory
+        }));
+        setCategories(normalized);
         setLoading(false);
       })
       .catch(() => {
@@ -24,64 +27,56 @@ export const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-gray-100 text-gray-600 mt-20 border-t border-gray-200">
-      <div className="container-max mx-auto px-6 lg:px-12 py-16">
+    <footer className="bg-gray-50 text-gray-600 mt-24 border-t border-gray-200">
+      <div className="container-max mx-auto px-6 lg:px-12 py-20">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-16">
           
           {/* Section: À propos */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <img src={logo} alt="Getrac Logo" className="h-12 w-auto object-contain" />
-              <h3 className="text-[#115E59] text-xl font-bold tracking-tight">Getrac Services</h3>
+          <div className="space-y-8">
+            <div className="flex items-center gap-4">
+              <img src={logo} alt="Getrac Logo" className="h-14 w-auto object-contain" />
+              <div className="flex flex-col">
+                <h3 className="text-[#115E59] text-2xl font-black tracking-tighter leading-none">GETRAC</h3>
+                <span className="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase">Services</span>
+              </div>
             </div>
-            <p className="text-gray-600 leading-relaxed">
-              Votre partenaire de confiance au Sénégal pour l'équipement informatique professionnel et les solutions télécoms de pointe.
+            <p className="text-gray-500 leading-relaxed text-sm md:text-base">
+              Votre partenaire de confiance au Sénégal pour l'équipement informatique professionnel et les solutions télécoms de pointe. Expert en infrastructure IT depuis Dakar.
             </p>
-            <div className="flex gap-4">
-              {/* Tu pourras ajouter tes réseaux sociaux ici plus tard */}
-            </div>
           </div>
 
           {/* Section: Navigation rapide */}
           <div>
-            <h4 className="text-gray-900 text-lg font-bold mb-6">Navigation</h4>
+            <h4 className="text-gray-900 text-lg font-black mb-8 border-b-2 border-[#115E59] inline-block pb-1">Navigation</h4>
             <ul className="space-y-4">
-              <li>
-                <Link to="/" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
-                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
-                  Accueil
-                </Link>
-              </li>
-              <li>
-                <Link to="/products" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
-                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
-                  Catalogue
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2">
-                  <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
-                  Contact
-                </Link>
-              </li>
+              {['Accueil', 'Catalogue', 'Contact'].map((item) => (
+                <li key={item}>
+                  <Link 
+                    to={item === 'Accueil' ? '/' : `/${item.toLowerCase()}`} 
+                    className="group text-gray-500 hover:text-[#115E59] transition-all flex items-center gap-2 font-medium"
+                  >
+                    <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Section: Catégories dynamiques */}
           <div>
-            <h4 className="text-gray-900 text-lg font-bold mb-6">Catégories</h4>
+            <h4 className="text-gray-900 text-lg font-black mb-8 border-b-2 border-[#115E59] inline-block pb-1">Catégories</h4>
             <ul className="space-y-4">
-              {loading && <li className="text-gray-400 animate-pulse">Chargement...</li>}
-              {error && <li className="text-red-400 text-sm">{error}</li>}
+              {loading && <li className="text-gray-400 animate-pulse text-sm">Récupération des catégories...</li>}
+              {error && <li className="text-red-400 text-xs italic">{error}</li>}
               {!loading && !error && categories.slice(0, 5).map((cat) => (
-                <li key={cat.id || cat.name}>
-                  {/* Note: On utilise idCategory car c'est le nom dans ta base MySQL */}
+                <li key={cat.id}>
                   <Link 
                     to={`/products?category=${cat.id}`} 
-                    className="group text-gray-600 hover:text-[#115E59] transition-colors flex items-center gap-2"
+                    className="group text-gray-500 hover:text-[#115E59] transition-all flex items-center gap-2 font-medium"
                   >
-                    <span className="w-1 h-1 rounded-full bg-[#9bd4d0]"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#9bd4d0] group-hover:bg-[#115E59] transition-colors"></span>
                     {cat.name}
                   </Link>
                 </li>
@@ -91,25 +86,27 @@ export const Footer = () => {
 
           {/* Section: Contact Direct */}
           <div>
-            <h4 className="text-gray-900 text-lg font-bold mb-6">Contactez-nous</h4>
-            <div className="space-y-5">
-              <div className="flex items-start gap-3">
-                <MapPin size={20} className="text-[#115E59] shrink-0 mt-1" />
-                <span className="text-gray-600">Dakar, Sénégal<br/><span className="text-xs text-gray-400">Siège social</span></span>
+            <h4 className="text-gray-900 text-lg font-black mb-8 border-b-2 border-[#115E59] inline-block pb-1">Nous trouver</h4>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <MapPin size={22} className="text-[#115E59] shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-gray-900 font-bold text-sm">Dakar, Sénégal</span>
+                  <span className="text-xs text-gray-400">Siège social & Logistique</span>
+                </div>
               </div>
               
-              <div className="flex items-start gap-3">
-                <Phone size={20} className="text-[#115E59] shrink-0 mt-1" />
-                <div className="flex flex-col gap-2">
-                  <a href="tel:+221338250093" className="hover:text-[#115E59] transition-colors font-medium text-gray-700">+221 33 825 00 93</a>
-                  <a href="tel:+221776347475" className="hover:text-[#115E59] transition-colors text-sm">+221 77 634 74 75</a>
-                  <a href="tel:+221776444454" className="hover:text-[#115E59] transition-colors text-sm">+221 77 644 44 54</a>
+              <div className="flex items-start gap-4">
+                <Phone size={22} className="text-[#115E59] shrink-0" />
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+221338250093" className="hover:text-[#115E59] transition-colors font-bold text-gray-900">+221 33 825 00 93</a>
+                  <a href="tel:+221776347475" className="hover:text-[#115E59] transition-colors text-xs text-gray-500">SAV: +221 77 634 74 75</a>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Mail size={20} className="text-[#115E59] shrink-0" />
-                <a href="mailto:servicesgetrac@gmail.com" className="hover:text-[#115E59] transition-colors break-all font-medium text-gray-700">
+              <div className="flex items-center gap-4">
+                <Mail size={22} className="text-[#115E59] shrink-0" />
+                <a href="mailto:servicesgetrac@gmail.com" className="hover:text-[#115E59] transition-colors break-all font-bold text-gray-900 text-sm">
                   servicesgetrac@gmail.com
                 </a>
               </div>
@@ -118,17 +115,17 @@ export const Footer = () => {
         </div>
 
         {/* Barre de pied de page (Copyright & Legal) */}
-        <div className="border-t border-gray-200 pt-8 mt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-sm text-gray-500 font-medium">
-              © {new Date().getFullYear()} <span className="text-[#115E59]">Getrac Services</span>. Tous droits réservés.
+        <div className="border-t border-gray-200 pt-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <p className="text-xs text-gray-400 font-bold tracking-wider">
+              © {new Date().getFullYear()} <span className="text-[#115E59]">GETRAC SERVICES</span>. TOUS DROITS RÉSERVÉS.
             </p>
-            <div className="flex flex-wrap justify-center gap-8 text-sm">
-              <Link to="/privacy" className="text-gray-500 hover:text-[#115E59] transition-colors">
+            <div className="flex flex-wrap justify-center gap-10 text-[11px] font-black uppercase tracking-widest">
+              <Link to="/privacy" className="text-gray-400 hover:text-[#115E59] transition-colors">
                 Confidentialité
               </Link>
-              <Link to="/terms" className="text-gray-500 hover:text-[#115E59] transition-colors">
-                Conditions de vente
+              <Link to="/terms" className="text-gray-400 hover:text-[#115E59] transition-colors">
+                Conditions
               </Link>
             </div>
           </div>
