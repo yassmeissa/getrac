@@ -1,1 +1,35 @@
-/* App styles are handled by Tailwind CSS */
+.fly-to-cart {
+  animation: flyToCartAnim 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  /* Assure que l'image maintient son ratio pendant l'animation */
+  object-fit: cover; 
+  border-radius: 8px; /* Optionnel : pour faire plus joli */
+}
+@keyframes flyToCartAnim {
+  0% { 
+    /* Translate d'abord, scale ensuite */
+    transform: translate(0, 0) scale(1); 
+    opacity: 1; 
+  }
+  60% { 
+    transform: translate(calc(var(--dest-x) * 0.6), calc(var(--dest-y) * 0.6 - 40px)) scale(0.6); 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translate(var(--dest-x), var(--dest-y)) scale(0.1); 
+    opacity: 0; 
+  }
+}@keyframes flyToCartAnim {
+  0% { 
+    /* Translate d'abord, scale ensuite */
+    transform: translate(0, 0) scale(1); 
+    opacity: 1; 
+  }
+  60% { 
+    transform: translate(calc(var(--dest-x) * 0.6), calc(var(--dest-y) * 0.6 - 40px)) scale(0.6); 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translate(var(--dest-x), var(--dest-y)) scale(0.1); 
+    opacity: 0; 
+  }
+}

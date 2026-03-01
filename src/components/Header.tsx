@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import logo from '../assets/logo-getrac.png';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
   // Fonction pour vérifier si un lien est actif
@@ -46,17 +45,15 @@ export const Header = () => {
 
           {/* Search Bar & Mobile Toggle */}
           <div className="flex items-center gap-4 shrink-0">
-            <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2.5 w-72 focus-within:ring-2 focus-within:ring-[#9bd4d0] focus-within:bg-white transition-all">
-              <Search size={18} className="text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher un produit..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent border-none outline-none ml-3 w-full text-gray-700 text-sm placeholder-gray-400"
-              />
-            </div>
-
+            <button className="p-2 text-gray-600 hover:text-[#054d3b] transition-colors">
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <button
+              id="cart-icon"
+              className="p-2 text-gray-600 hover:text-[#054d3b] transition-colors"
+            >
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 text-gray-600 hover:text-[#054d3b] transition-colors"
@@ -88,18 +85,14 @@ export const Header = () => {
                 {link.label}
               </Link>
             ))}
-            
-            <div className="mt-4 px-4">
-              <div className="flex items-center bg-gray-100 rounded-xl px-4 py-3">
-                <Search size={18} className="text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Rechercher un produit..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-none outline-none ml-3 w-full text-gray-700 text-sm"
-                />
-              </div>
+            {/* Icônes panier et like en mobile */}
+            <div className="flex gap-4 mt-4 px-4">
+              <button className="p-2 text-gray-600 hover:text-[#054d3b] transition-colors">
+                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <button className="p-2 text-gray-600 hover:text-[#054d3b] transition-colors">
+                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              </button>
             </div>
           </div>
         </div>

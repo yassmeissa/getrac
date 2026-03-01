@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Heart, ShoppingCart, Star, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Heart, ShoppingCart, Truck, Shield, RotateCcw } from 'lucide-react';
 import { productService } from '../services/api';
 import type { Product } from '../types';
 
@@ -22,10 +22,7 @@ export const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
-  // Generate discount based on product ID to ensure consistency
-  const discount = useMemo(() => {
-    return product ? (product.id * 7) % 30 + 5 : 0;
-  }, [product]);
+  const qty = product ? ((product as any).qty ?? product.stock ?? 0) : 0;
 
   if (loading) {
     return (
@@ -67,31 +64,18 @@ export const ProductDetail = () => {
           {/* Product Image */}
           <div className="card p-6">
             <img
-              src={product.image}
+              src={product.img}
               alt={product.name}
               className="w-full h-96 object-cover rounded-lg"
             />
-            <div className="mt-4 flex gap-2">
-              {[1, 2, 3, 4].map(i => (
-                <img
-                  key={i}
-                  src={product.image}
-                  alt={`${product.name} ${i}`}
-                  className="w-20 h-20 object-cover rounded cursor-pointer hover:opacity-75"
-                />
-              ))}
-            </div>
           </div>
 
           {/* Product Info */}
           <div>
-            {/* Category & Badge */}
+            {/* Category */}
             <div className="flex items-center gap-4 mb-4">
               <span className="text-xs font-semibold text-[#054d3b] uppercase bg-[#e6f6f4] px-3 py-1 rounded-full">
                 {product.category}
-              </span>
-              <span className="text-xs font-semibold text-[#054d3b] uppercase bg-[#e6f6f4] px-3 py-1 rounded-full">
-                -{discount}%
               </span>
             </div>
 
@@ -100,35 +84,15 @@ export const ProductDetail = () => {
               {product.name}
             </h1>
 
-            {/* Rating */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={20}
-                    className={i < Math.round(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
-                  />
-                ))}
-              </div>
-              <span className="text-gray-600">
-                {product.rating}/5 ({product.reviews} avis)
-              </span>
-            </div>
-
             {/* Price */}
             <div className="mb-6">
               <div className="flex items-center gap-4">
                 <span className="text-5xl font-bold text-gray-900">
-                  {product.price.toFixed(2)}€
-                </span>
-                <span className="text-2xl text-gray-500 line-through">
-                  {(product.price * 1.2).toFixed(2)}€
+                  {product.price !== undefined && !isNaN(Number(product.price))
+                    ? Number(product.price).toLocaleString('fr-FR', { style: 'currency', currency: 'XOF', minimumFractionDigits: 0 })
+                    : '—'}
                 </span>
               </div>
-              <p className="text-green-600 font-semibold mt-2">
-                Économisez {(product.price * 0.2).toFixed(2)}€
-              </p>
             </div>
 
             {/* Description */}
@@ -138,8 +102,8 @@ export const ProductDetail = () => {
 
             {/* Stock Status */}
             <div className="mb-6">
-              <p className={`text-lg font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {product.stock > 0 ? `${product.stock} en stock` : 'Rupture de stock'}
+              <p className={`text-lg font-semibold ${qty > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {qty > 0 ? `${qty} en stock` : 'Rupture de stock'}
               </p>
             </div>
 
@@ -169,7 +133,7 @@ export const ProductDetail = () => {
 
             {/* Actions */}
             <div className="flex gap-4 mb-8">
-              <button disabled={product.stock === 0} className="flex-1 btn-primary flex items-center justify-center gap-2">
+              <button disabled={qty === 0} className="flex-1 btn-primary flex items-center justify-center gap-2">
                 <ShoppingCart size={20} />
                 Ajouter au panier
               </button>
@@ -185,7 +149,7 @@ export const ProductDetail = () => {
                 <Truck className="text-[#054d3b] flex-shrink-0" size={24} />
                 <div>
                   <h4 className="font-semibold text-gray-900">Livraison gratuite</h4>
-                  <p className="text-sm text-gray-600">Pour toute commande supérieure à 50€</p>
+                  <p className="text-sm text-gray-600">Pour toute commande supérieure à 150 000 F CFA</p>
                 </div>
               </div>
               <div className="flex gap-4">
