@@ -77,7 +77,7 @@ export const Footer = () => {
                     className="group text-gray-500 hover:text-[#115E59] transition-all flex items-center gap-2 font-medium"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#9bd4d0] group-hover:bg-[#115E59] transition-colors"></span>
+                    <ChevronRight size={14} className="text-[#9bd4d0] group-hover:translate-x-1 transition-transform" /> 
                     {cat.name}
                   </Link>
                 </li>
