@@ -52,7 +52,7 @@ const Dashboard = () => {
     })
       .then(res => {
         // Conversion des données brutes en stats pour le grid
-        const { totalSales, countSales, orders } = res.data;
+        const { totalSales, countSales } = res.data;
         const statsArr = [
           {
             key: 'revenue',
