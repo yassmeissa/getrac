@@ -52,28 +52,22 @@ const Dashboard = () => {
     })
       .then(res => {
         // Conversion des données brutes en stats pour le grid
-        const { totalSales, countSales } = res.data;
+        const { totalSales, countSales, distinctClients } = res.data;
         const statsArr = [
           {
             key: 'revenue',
             title: 'Revenus du mois',
-            value: totalSales ? `${Number(totalSales).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}` : '0 €',
-            trend: '+0%', // À calculer dynamiquement si besoin
-            isPositive: true
+            value: totalSales ? `${Number(totalSales).toLocaleString('fr-FR', { style: 'currency', currency: 'XOF' })}` : '0 F'
           },
           {
             key: 'orders',
             title: 'Commandes',
-            value: countSales || '0',
-            trend: '+0%', // À calculer dynamiquement si besoin
-            isPositive: true
+            value: countSales || '0'
           },
           {
             key: 'customers',
             title: 'Clients',
-            value: '-', // À remplacer par le vrai nombre de clients si dispo
-            trend: '+0%',
-            isPositive: true
+            value: distinctClients || '0'
           }
         ];
         setStats(statsArr);
@@ -185,14 +179,8 @@ const Dashboard = () => {
                 <div key={index} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-4">
                     <div className={`p-3 rounded-xl bg-emerald-100`}>
-                      <Icon size={24} className={stat.isPositive ? 'text-emerald-600' : 'text-rose-600'} />
+                      <Icon size={24} className="text-emerald-600" />
                     </div>
-                    <span className={`flex items-center gap-1 text-sm font-medium px-2.5 py-1 rounded-full ${
-                      stat.isPositive ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
-                    }`}>
-                      {stat.isPositive ? <TrendingUp size={14} /> : <TrendingUp size={14} className="rotate-180" />}
-                      {stat.trend}
-                    </span>
                   </div>
                   <h3 className="text-slate-500 text-sm font-medium mb-1">{stat.title}</h3>
                   <p className="text-3xl font-bold text-slate-800">{stat.value}</p>
