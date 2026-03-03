@@ -51,8 +51,32 @@ const Dashboard = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('admin_token')}` }
     })
       .then(res => {
-        // Attendu: [{ key: 'revenue', title: 'Revenus du mois', value: '...', trend: '...', isPositive: true }, ...]
-        setStats(res.data.stats || []);
+        // Conversion des données brutes en stats pour le grid
+        const { totalSales, countSales, orders } = res.data;
+        const statsArr = [
+          {
+            key: 'revenue',
+            title: 'Revenus du mois',
+            value: totalSales ? `${Number(totalSales).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}` : '0 €',
+            trend: '+0%', // À calculer dynamiquement si besoin
+            isPositive: true
+          },
+          {
+            key: 'orders',
+            title: 'Commandes',
+            value: countSales || '0',
+            trend: '+0%', // À calculer dynamiquement si besoin
+            isPositive: true
+          },
+          {
+            key: 'customers',
+            title: 'Clients',
+            value: '-', // À remplacer par le vrai nombre de clients si dispo
+            trend: '+0%',
+            isPositive: true
+          }
+        ];
+        setStats(statsArr);
       })
       .catch(() => setStats([]));
   }, []);
@@ -191,3 +215,21 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+// La route backend suivante doit être déplacée dans ton fichier serveur Express (ex: server.js), PAS dans ce fichier React !
+//
+// app.post('/api/orders', async (req: Request, res: Response) => {
+//   try {
+//     const { amount, client, products, status } = req.body;
+//     if (!amount || !products) {
+//       return res.status(400).json({ error: 'Montant et produits requis.' });
+//     }
+//     const result = await db.query(
+//       'INSERT INTO orders (amount, client, products, status) VALUES ($1, $2, $3, $4) RETURNING *',
+//       [amount, client || null, JSON.stringify(products), status || 'pending']
+//     );
+//     res.status(201).json({ success: true, order: result.rows[0] });
+//   } catch (err: any) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
