@@ -11,7 +11,6 @@ import {
   LogOut,
   Search,
   Bell,
-  TrendingUp,
   ShoppingCart,
   DollarSign
 } from 'lucide-react';
