@@ -7,15 +7,24 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation d'authentification (à remplacer par appel API)
-    if (email === 'admin@getrac.com' && password === 'admin123') {
-      // Stocker le token ou l'état connecté ici
-      localStorage.setItem('admin_token', 'ok');
-      navigate('/admin');
-    } else {
-      setError('Identifiants incorrects');
+    setError('');
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (data.success && data.user.role === 'admin') {
+        localStorage.setItem('admin_token', data.token);
+        navigate('/admin');
+      } else {
+        setError(data.error || "Accès non autorisé");
+      }
+    } catch (err) {
+      setError('Erreur serveur.');
     }
   };
 
