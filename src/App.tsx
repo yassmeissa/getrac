@@ -25,28 +25,24 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-1 animate-fadeIn">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            {/* Admin routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={
-              <RequireAdminAuth>
-                <Dashboard />
-              </RequireAdminAuth>
-            } />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={
+            <RequireAdminAuth>
+              <Dashboard />
+            </RequireAdminAuth>
+          } />
+          {/* Routes utilisateur classique */}
+          <Route path="/" element={<><Header /><Home /><Footer /></>} />
+          <Route path="/products" element={<><Header /><Products /><Footer /></>} />
+          <Route path="/products/:id" element={<><Header /><ProductDetail /><Footer /></>} />
+          <Route path="/contact" element={<><Header /><Contact /><Footer /></>} />
+          <Route path="/cart" element={<><Header /><Cart /><Footer /></>} />
+          <Route path="/wishlist" element={<><Header /><Wishlist /><Footer /></>} />
+          <Route path="/terms" element={<><Header /><Terms /><Footer /></>} />
+          <Route path="/privacy" element={<><Header /><Privacy /><Footer /></>} />
+          <Route path="*" element={<><Header /><NotFound /><Footer /></>} />
+        </Routes>
       </div>
     </BrowserRouter>
   );
