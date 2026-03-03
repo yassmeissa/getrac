@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 import { 
   LayoutDashboard, 
   Package, 
@@ -28,6 +30,20 @@ const stats = [
 ];
 
 const Dashboard = () => {
+  const [admin, setAdmin] = useState<{ name?: string; email?: string } | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      try {
+        const decoded: any = jwt_decode(token);
+        setAdmin({ name: decoded.name, email: decoded.email });
+      } catch {
+        setAdmin(null);
+      }
+    }
+  }, []);
+
   // Simule la route actuelle si useLocation n'est pas encore configuré dans ton app
   // const location = useLocation();
   const currentPath = '/admin'; // Remplace par location.pathname en production
@@ -110,8 +126,8 @@ const Dashboard = () => {
                 className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-teal-100 transition-colors"
               />
               <div className="hidden md:block text-sm">
-                <p className="font-semibold text-slate-700">Thomas M.</p>
-                <p className="text-slate-500 text-xs">Administrateur</p>
+                <p className="font-semibold text-slate-700">{admin?.name || 'Admin'}</p>
+                <p className="text-slate-500 text-xs">{admin?.email || 'admin@getrac.com'}</p>
               </div>
             </div>
           </div>
