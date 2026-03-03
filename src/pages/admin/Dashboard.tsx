@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { 
   LayoutDashboard, 
   Package, 
@@ -36,7 +36,7 @@ const Dashboard = () => {
     const token = localStorage.getItem('admin_token');
     if (token) {
       try {
-        const decoded: any = jwt_decode(token);
+        const decoded: any = jwtDecode(token);
         setAdmin({ name: decoded.name, email: decoded.email });
       } catch {
         setAdmin(null);
