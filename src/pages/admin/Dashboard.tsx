@@ -51,7 +51,7 @@ const Dashboard = () => {
     })
       .then(res => {
         // Conversion des données brutes en stats pour le grid
-        const { totalSales, countSales, distinctClients } = res.data;
+        const { totalSales, countSales, countClients} = res.data;
         const statsArr = [
           {
             key: 'revenue',
@@ -66,7 +66,7 @@ const Dashboard = () => {
           {
             key: 'customers',
             title: 'Clients',
-            value: distinctClients || '0'
+            value: countClients|| '0'
           }
         ];
         setStats(statsArr);
