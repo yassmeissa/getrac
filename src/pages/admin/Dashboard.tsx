@@ -1,19 +1,26 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { 
-  LayoutDashboard, 
-  Package, 
-  Tags, 
-  Users, 
-  Settings, 
-  LogOut, 
-  Search, 
-  Bell, 
-  TrendingUp, 
-  ShoppingCart, 
-  DollarSign 
+import api from '../../services/api';
+import {
+  LayoutDashboard,
+  Package,
+  Tags,
+  Users,
+  Settings,
+  LogOut,
+  Search,
+  Bell,
+  TrendingUp,
+  ShoppingCart,
+  DollarSign
 } from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+  revenue: DollarSign,
+  orders: ShoppingCart,
+  customers: Users,
+};
 
 const sidebarLinks = [
   { label: 'Vue d\'ensemble', to: '/admin', icon: LayoutDashboard },
@@ -23,25 +30,31 @@ const sidebarLinks = [
   { label: 'Paramètres', to: '/admin/settings', icon: Settings },
 ];
 
-const stats = [
-  { title: "Revenus du mois", value: "24 500 €", trend: "+12%", isPositive: true, icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-100" },
-  { title: "Nouvelles Commandes", value: "342", trend: "+5%", isPositive: true, icon: ShoppingCart, color: "text-blue-600", bg: "bg-blue-100" },
-  { title: "Nouveaux Clients", value: "128", trend: "-2%", isPositive: false, icon: Users, color: "text-rose-600", bg: "bg-rose-100" },
-];
-
 const Dashboard = () => {
-  const [admin, setAdmin] = useState<{ name?: string; email?: string; avatar?: string } | null>(null);
+  const [admin, setAdmin] = useState<{ name?: string; email?: string } | null>(null);
+  const [stats, setStats] = useState<any[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
-        setAdmin({ name: decoded.name, email: decoded.email, avatar: decoded.avatar || decoded.image });
+        setAdmin({ name: decoded.name, email: decoded.email });
       } catch {
         setAdmin(null);
       }
     }
+  }, []);
+
+  useEffect(() => {
+    api.get('/admin/dashboard', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('admin_token')}` }
+    })
+      .then(res => {
+        // Attendu: [{ key: 'revenue', title: 'Revenus du mois', value: '...', trend: '...', isPositive: true }, ...]
+        setStats(res.data.stats || []);
+      })
+      .catch(() => setStats([]));
   }, []);
 
   // Simule la route actuelle si useLocation n'est pas encore configuré dans ton app
@@ -136,19 +149,19 @@ const Dashboard = () => {
         {/* Dashboard Content */}
         <div className="flex-1 overflow-y-auto p-8">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-800">Bonjour, Thomas 👋</h1>
+            <h1 className="text-2xl font-bold text-slate-800">Bonjour, {admin?.name || 'Admin'} 👋</h1>
             <p className="text-slate-500 mt-1">Voici ce qu'il se passe sur votre boutique aujourd'hui.</p>
           </div>
 
-          {/* Stats Grid */}
+          {/* Stats Grid dynamique */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {stats.map((stat, index) => {
-              const Icon = stat.icon;
+              const Icon = iconMap[stat.key] || LayoutDashboard;
               return (
                 <div key={index} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex justify-between items-start mb-4">
-                    <div className={`p-3 rounded-xl ${stat.bg}`}>
-                      <Icon size={24} className={stat.color} />
+                    <div className={`p-3 rounded-xl bg-emerald-100`}>
+                      <Icon size={24} className={stat.isPositive ? 'text-emerald-600' : 'text-rose-600'} />
                     </div>
                     <span className={`flex items-center gap-1 text-sm font-medium px-2.5 py-1 rounded-full ${
                       stat.isPositive ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
