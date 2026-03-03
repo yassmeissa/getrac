@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -11,20 +12,16 @@ const AdminLogin = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
+      const res = await api.post('/login', { email, password });
+      const data = res.data;
       if (data.success && data.user.role === 'admin') {
         localStorage.setItem('admin_token', data.token);
         navigate('/admin');
       } else {
         setError(data.error || "Accès non autorisé");
       }
-    } catch (err) {
-      setError('Erreur serveur.');
+    } catch (err: any) {
+      setError(err?.response?.data?.error || 'Erreur serveur.');
     }
   };
 
