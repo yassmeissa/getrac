@@ -8,6 +8,9 @@ import Privacy from './pages/Privacy';
 import './App.css';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Dashboard from './pages/admin/Dashboard';
+import AdminLogin from './pages/admin/AdminLogin';
+import RequireAdminAuth from './pages/admin/RequireAdminAuth';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -33,6 +36,13 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            {/* Admin routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={
+              <RequireAdminAuth>
+                <Dashboard />
+              </RequireAdminAuth>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
