@@ -12,6 +12,7 @@ const AdminLogin = () => {
     // Simulation d'authentification (à remplacer par appel API)
     if (email === 'admin@getrac.com' && password === 'admin123') {
       // Stocker le token ou l'état connecté ici
+      localStorage.setItem('admin_token', 'ok');
       navigate('/admin');
     } else {
       setError('Identifiants incorrects');
