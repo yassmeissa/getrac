@@ -30,14 +30,14 @@ const stats = [
 ];
 
 const Dashboard = () => {
-  const [admin, setAdmin] = useState<{ name?: string; email?: string } | null>(null);
+  const [admin, setAdmin] = useState<{ name?: string; email?: string; avatar?: string } | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
-        setAdmin({ name: decoded.name, email: decoded.email });
+        setAdmin({ name: decoded.name, email: decoded.email, avatar: decoded.avatar || decoded.image });
       } catch {
         setAdmin(null);
       }
@@ -121,7 +121,7 @@ const Dashboard = () => {
             <div className="w-px h-8 bg-slate-200"></div>
             <div className="flex items-center gap-3 cursor-pointer group">
               <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                src="/vite.svg" 
                 alt="Admin Profile" 
                 className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-teal-100 transition-colors"
               />
